@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>ClientKeeper - Prédiction de Churn</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            background-color: #1e88e5;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+            margin-right: 20px;
+        }
+
+        .header-title {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1e88e5;
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-top: 20px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input, select {
+            padding: 10px;
+            margin-top: 6px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #1e88e5;
+            color: white;
+            padding: 12px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 30px;
+            transition: background 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1565c0;
+        }
+
+        .prediction {
+            margin-top: 25px;
+            font-size: 18px;
+            text-align: center;
+            color: #27ae60;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            input, select {
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- En-tête avec logo -->
+    <div class="header">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo">
+        <div class="header-title">ClientKeeper</div>
+    </div>
+
+    <!-- Formulaire de prédiction -->
+    <div class="container">
+        <h1>Prédiction : Client fidèle ou partant ?</h1>
+
+        <form action="/predict" method="POST">
+            <label>Score Crédit :</label>
+            <input type="number" name="CreditScore" required>
+
+            <label>Pays :</label>
+            <select name="Geography" required>
+                <option value="">Sélectionner</option>
+                <option value="France">France</option>
+                <option value="Germany">Allemagne</option>
+                <option value="Spain">Espagne</option>
+            </select>
+
+            <label>Genre :</label>
+            <select name="Gender" required>
+                <option value="male">Homme</option>
+                <option value="female">Femme</option>
+            </select>
+
+            <label>Âge :</label>
+            <input type="number" name="Age" required>
+
+            <label>Ancienneté (années) :</label>
+            <input type="number" name="Tenure" required>
+
+            <label>Solde (€) :</label>
+            <input type="number" step="0.01" name="Balance" required>
+
+            <label>Nombre de produits :</label>
+            <input type="number" name="NumOfProducts" required>
+
+            <label>Carte de crédit :</label>
+            <select name="HasCrCard" required>
+                <option value="">Sélectionner</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+
+            <label>Membre actif :</label>
+            <select name="IsActiveMember" required>
+                <option value="">Sélectionner</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+            </select>
+
+            <label>Salaire estimé (€) :</label>
+            <input type="number" step="0.01" name="EstimatedSalary" required>
+
+            <input type="submit" value="Lancer la prédiction">
+        </form>
+
+        {% if prediction %}
+            <div class="prediction">{{ prediction }}</div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
